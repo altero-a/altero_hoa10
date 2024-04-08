@@ -1,0 +1,60 @@
+---
+- hosts: gns3_router
+  connection: network_cli
+  become: true
+  gather_facts: no
+  tasks:
+
+  - name: change hostname of R1
+    ios_config:
+      lines:
+        - hostname R1
+    become: yes
+    become_method: enable
+
+  - name: activate service password encryption 
+    ios_config:
+      lines:
+        - service password-encryption
+    become: yes
+    become_method: enable
+
+  - name: configure banner login
+    ios_banner:
+      banner: login
+      text: |
+        Unauthorized access is prohibited
+    become: yes
+    become_method: enable
+
+  - name: configure password and activate login for line con 0
+    ios_config:
+      lines:
+        - password altero
+        - login
+      parents: line console 0
+    become: yes
+    become_method: enable
+
+  - name: enable secret pas fo R1
+    ios_config:
+      lines:
+        - enable secret class
+    become: yes
+    become_method: enable
+
+  - name: configure ip add of int g0/1 and no shutdown on R1
+    ios_config:
+      lines:
+        - ip address 10.10.0.1 255.255.255.0
+        - no shutdown
+      parents: interface g0/1
+    become: yes
+    become_method: enable
+
+  - name: save configuratio on R1
+    ios_config:
+      lines:
+        - do write memory
+    become: yes
+    become_method: enable
