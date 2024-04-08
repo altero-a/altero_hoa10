@@ -1,0 +1,9 @@
+[gns3_router]
+R1
+
+[gns3_router:vars]
+ansible_user=altero
+ansible_password=altero
+ansible_network_os=ios
+ansible_become=yes
+ansible_become_method=enable
